@@ -23,3 +23,33 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add("createContacts", () => {
+  cy.request({
+    method: "POST",
+    url: "https://qa5.digisac.co/api/v1/contacts",
+    body: {
+      name: "Cypress_teste",
+    },
+  }).then((response) => {
+    expect(response.body.data).is.not.null;
+    cy.log(response.body.data);
+
+    Cypress.env("createContacts", response.body.data);
+  });
+});
+
+Cypress.Commands.add("logon", () => {
+  cy.request({
+    method: "POST",
+    url: "https://qa5.digisac.co/",
+    body: {
+      name: "admin@teste.com",
+      password: "123456",
+    },
+  }).then((response) => {
+    expect(response.body.data).is.not.null;
+    cy.log(response.body.data);
+
+    Cypress.env("logon", response.body.data);
+  });
+});
